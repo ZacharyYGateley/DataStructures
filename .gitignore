@@ -1,3 +1,6 @@
+DataStructures/__pycache__/*
 DataStructures/BinarySearchTree.py
 DataStructures/LinkedList.py
 DataStructures/NodeBST.py
+.idea
+.idea/*

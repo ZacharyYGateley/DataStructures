@@ -41,8 +41,12 @@ class Heap:
         # Update heap level
         self.level = np.floor(np.log(self.last_item + 1) / np.log(2))
 
-    def show(self):
-        """ Show heap """
+    def show(self, highlight=None):
+        """
+        Show heap
+        :param highlight: highlight this index
+        :return:
+        """
 
         if self.last_item < 0:
             print ('****************')
@@ -60,8 +64,6 @@ class Heap:
         demarcate()
         last_level = 0
         for i in range(0, self.last_item + 1, 1):
-            value_at = self.get_value_at(i)
-
             # Center each level so that has appropriate width
             level = np.floor(np.log(i + 1) / np.log(2))
             # At level up, break line
@@ -70,7 +72,13 @@ class Heap:
                 print ('\n', end='')
             # On last line, pad each item by one space each side
             width_each = int(np.power(2, self.level - level)) * minimum_cell
-            print (str(value_at).center(width_each), end='')
+
+            # Get string value
+            value_number = str(self.get_value_at(i))
+            value_at = value_number.center(width_each)
+            if i == highlight:
+                value_at = value_at.replace(value_number, '\x1b[1;37;40m' + value_number + '\x1b[0m')
+            print (value_at, end='')
 
         # End line
         print ('\n', end='')

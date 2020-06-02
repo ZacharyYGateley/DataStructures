@@ -1,13 +1,14 @@
 from DataStructures import Heap
 import numpy as np
 
-strings = {
-    'before':   'Before action performed.',
-    'added':    'Value added to end of heap. Max-heap property not necessarily satisfied.',
-    'extracted':'Maximum value extracted. Max-heap property not necessarily satisfied.',
-    'middle':   'Intermediate heap. Max-heap property not necessarily satisfied.',
-    'end':      'Final heap. Max-heap property satisfied.'
-}
+
+class output_strings:
+    BEFORE =    'Before action performed.'
+    ADDED =     'Value added to end of heap. Max-heap property not necessarily satisfied.'
+    EXTRACTED = 'Maximum value extracted. Max-heap property not necessarily satisfied.'
+    MIDDLE =    'Intermediate heap. Max-heap property not necessarily satisfied.'
+    END =       'Final heap. Max-heap property satisfied.'
+
 
 class MaxHeap(Heap.Heap):
     """
@@ -44,10 +45,10 @@ class MaxHeap(Heap.Heap):
 
             # Verbose: show intermediate heaps
             if verbose and i_this > 0:
-                self.log('middle')
+                self.log('MIDDLE', highlight=i_this)
 
         if verbose:
-            self.log('end')
+            self.log('END', highlight=i_this)
 
     def update_max_heap_property_down(self, starting_index, verbose=False):
         """
@@ -84,11 +85,11 @@ class MaxHeap(Heap.Heap):
 
             # Verbose: Show intermediate heaps
             if verbose:
-                self.log('middle')
+                self.log('MIDDLE', highlight=i_this)
 
         # Verbose: show final heap
         if verbose:
-            self.log('end')
+            self.log('END', highlight=i_this)
 
     def add_item(self, new_value, verbose=False):
         """
@@ -101,7 +102,7 @@ class MaxHeap(Heap.Heap):
 
         # Verbose: show heap before addition
         if verbose:
-            self.log('before')
+            self.log('BEFORE')
 
         # Add as last item
         # Update heap last_item and level
@@ -109,7 +110,7 @@ class MaxHeap(Heap.Heap):
 
         # Verbose: show heap before max-heap property satisfied
         if verbose:
-            self.log('added')
+            self.log('ADDED', highlight=self.last_item)
 
         # Update max heap property upwards
         self.update_max_heap_property_up(self.last_item, verbose=verbose)
@@ -124,7 +125,7 @@ class MaxHeap(Heap.Heap):
 
         # Verbose: Show tree before popping
         if verbose:
-            self.log('before')
+            self.log('BEFORE')
 
         # Remove first item
         max_value = self.get_value_at(0)
@@ -134,19 +135,19 @@ class MaxHeap(Heap.Heap):
 
         # Verbose: Show tree before fixing max heap property
         if verbose:
-            self.log('extracted')
+            self.log('EXTRACTED', highlight=0)
 
         # Update max heap property downwards
         self.update_max_heap_property_down(0, verbose=verbose)
 
         return max_value
 
-    def log(self, string):
+    def log(self, string, highlight=None):
         """
         For verbose output, show message and heap state
         :param string: string from strings[] list
         :return: no return value
         """
-        print (strings[string])
-        self.show()
+        print (output_strings.__getattribute__(output_strings, string))
+        self.show(highlight=highlight)
         print ('\n', end='')

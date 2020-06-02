@@ -1,0 +1,24 @@
+# Short term
+DataStructures/NodeBST.py
+DataStructures/BinarySearchTree.py
+DataStructures/LinkedList.py
+
+# Long term
+Self-balancing BSTs
+	Red-Black Tree
+	AVL Trees
+	Splay Trees
+Hash Tables
+	Open Addressing
+	Closed Addressing
+Stack
+Queue
+
+Unreasonable with console interface (?):
+Algorithms?
+	Graphs?
+		DFS
+		BFS
+		MSTs
+			Kruskal
+			Prim

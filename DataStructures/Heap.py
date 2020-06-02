@@ -7,7 +7,8 @@ class Heap:
 
     # Heap as unlimited numpy array
     # Useful for math functions such as max
-    heap = np.array([], dtype=np.int)
+    heap_size = 10
+    heap = np.array([0] * heap_size, dtype=np.int)
     # Last item points to size
     last_item = -1
     # Deepest level, zero-indexed1
@@ -21,19 +22,32 @@ class Heap:
         :param new_value: new value
         :return: No return value
         """
-        # Add as last item
-        # Numpy append not in place
-        self.heap = np.append(self.heap, new_value)
 
-        # Update heap last_item and level
+        # Allocate more memory if necessary
+        # This keeps add_item to O(1), generally.
+        # Otherwise, have to duplicate ndarray every time
+        # last_item is an index, heap_size is a limit (index + 1)
+        if self.last_item >= self.heap_size - 1:
+            # Allocate double the memory
+            new_heap_list = self.heap.tolist() + [0] * self.heap_size
+            self.heap = np.array(new_heap_list, dtype=np.int)
+            self.heap_size *= 2
+
+        # Add item index and value
+        # to already allocated memory
         self.last_item = self.last_item + 1
+        self.heap[self.last_item] = new_value
+
+        # Update heap level
         self.level = np.floor(np.log(self.last_item + 1) / np.log(2))
 
     def show(self):
         """ Show heap """
 
         if self.last_item < 0:
+            print ('****************')
             print ('No items in heap')
+            print ('****************')
             return
 
         # Maximum number of digits determines padding
@@ -53,7 +67,7 @@ class Heap:
             # At level up, break line
             if level > last_level:
                 last_level = level
-                print('\n', end='')
+                print ('\n', end='')
             # On last line, pad each item by one space each side
             width_each = int(np.power(2, self.level - level)) * minimum_cell
             print (str(value_at).center(width_each), end='')
@@ -66,28 +80,38 @@ class Heap:
     def get_parent_index(i):
         """
         Get index of parent node
-        :param i: index of node in question
+        :param i: index (0-indexed) of node in question
         :return: parent node index
         """
-        return i // 2
+        # Indexing for i_parent == i // 2 is NOT ZERO-INDEXED
+        pos = i + 1
+        parent_pos = pos // 2
+        parent_index = parent_pos - 1
+        return parent_index
 
     @staticmethod
     def get_left_index(i):
         """
         Get index of left child
-        :param i: index of parent item
+        :param i: index (0-indexed) of parent item
         :return: left child index
         """
-        return 2 * i
+        pos = i + 1
+        left_pos = 2 * pos
+        left_index = left_pos - 1
+        return left_index
 
     @staticmethod
     def get_right_index(i):
         """
         Get index of right child
-        :param i: index of parent item
+        :param i: index (0-indexed) of parent item
         :return: right child index
         """
-        return 2 * i + 1
+        pos = i + 1
+        right_pos = 2 * pos + 1
+        right_index = right_pos - 1
+        return right_index
 
     def get_value_at(self, i):
         """

@@ -1,8 +1,8 @@
-from DataStructures import Heap
+from DataStructures.BinaryHeap import BinaryHeap
 import numpy as np
 
 
-class output_strings:
+class OutputStrings:
     BEFORE =    'Before action performed.'
     ADDED =     'Value added to end of heap. Max-heap property not necessarily satisfied.'
     EXTRACTED = 'Maximum value extracted. Max-heap property not necessarily satisfied.'
@@ -10,9 +10,9 @@ class output_strings:
     END =       'Final heap. Max-heap property satisfied.'
 
 
-class MaxHeap(Heap.Heap):
+class BinaryMaxHeap(BinaryHeap):
     """
-    Implement heap data structure as max heap
+    Implement max binary heap structure, extending BinaryHeap
     """
 
     def __init__(self):
@@ -26,6 +26,7 @@ class MaxHeap(Heap.Heap):
         """
         Update max heap property upwards
         :param starting_index: index of value from which to start
+        :param verbose: boolean show node movement for max-heap property
         :return: no return value
         """
         i_this = starting_index
@@ -54,6 +55,7 @@ class MaxHeap(Heap.Heap):
         """
         Update max heap property downwards
         :param starting_index: index from which to start
+        :param verbose: boolean show node movement for max-heap property
         :return: no return value
         """
         i_this = starting_index
@@ -97,6 +99,7 @@ class MaxHeap(Heap.Heap):
         Update max heap property
         @overrides method in Heap
         :param new_value: new integer value
+        :param verbose: boolean show node movement for max-heap property
         :return: No return value
         """
 
@@ -118,6 +121,7 @@ class MaxHeap(Heap.Heap):
     def extract_max(self, verbose=False):
         """
         Remove first item (max) and update max-heap property
+        :param verbose: boolean show node movement for max-heap property
         :return: int first item (max)
         """
         if self.last_item < 0:
@@ -148,6 +152,6 @@ class MaxHeap(Heap.Heap):
         :param string: string from strings[] list
         :return: no return value
         """
-        print (output_strings.__getattribute__(output_strings, string))
+        print (OutputStrings.__getattribute__(OutputStrings, string))
         self.show(highlight=highlight)
         print ('\n', end='')

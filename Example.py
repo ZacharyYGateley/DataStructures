@@ -1,6 +1,6 @@
-from DataStructures import MaxHeap
+from DataStructures.BinaryMaxHeap import BinaryMaxHeap
 
-myHeap = MaxHeap.MaxHeap()
+myHeap = BinaryMaxHeap()
 
 
 class Options:

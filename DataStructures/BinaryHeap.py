@@ -1,8 +1,14 @@
 import numpy as np
+# Support for terminal colors in linux, max, and windows
+import colorama
+colorama.init()
 
-class Heap:
+
+class BinaryHeap:
     """
     Implement heap data structure as np.ndarray
+
+    For simplicity, only allow integers
     """
 
     # Heap as unlimited numpy array
@@ -15,6 +21,9 @@ class Heap:
     level = 0
     # When an item is not found
     default_value = 0
+    # Highlight colors for verbose
+    HIGHLIGHT_FORE = colorama.Fore.MAGENTA
+    HIGHLIGHT_BACK = colorama.Back.WHITE
 
     def add_item(self, new_value):
         """
@@ -75,10 +84,11 @@ class Heap:
 
             # Get string value
             value_number = str(self.get_value_at(i))
-            value_at = value_number.center(width_each)
+            value_formatted = value_number.center(width_each)
             if i == highlight:
-                value_at = value_at.replace(value_number, '\x1b[1;37;40m' + value_number + '\x1b[0m')
-            print (value_at, end='')
+                number_highlighted = self.HIGHLIGHT_FORE + self.HIGHLIGHT_BACK + value_number + colorama.Style.RESET_ALL
+                value_formatted = value_formatted.replace(value_number, number_highlighted)
+            print (value_formatted, end='')
 
         # End line
         print ('\n', end='')

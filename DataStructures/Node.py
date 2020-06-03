@@ -1,14 +1,14 @@
 
 
 class Node:
-    key = None
+    key = 0
 
-    def __init__(self, key=None, **kwargs):
+    def __init__(self, key):
         """
         Initialize with kwargs for each object variable
-        :param **kwargs: key, Node parent, Node left, Node right
+        :param key: key value for new node
         """
-        self.key = kwargs.get('key')
+        self.key = key
 
     @classmethod
     def or_none(cls, func):
@@ -17,6 +17,8 @@ class Node:
         If the passed value is Node,
         pass that value to the original function
         Otherwise, pass None to the original function
+        For class inheritance, if or_none is needed,
+        you likely want to override this method to pass the subclass
         :param cls: class name, can override
         :param func: decorating function
         :returns: decorator that calls function with (Node object || None)

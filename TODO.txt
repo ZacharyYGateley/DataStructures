@@ -1,6 +1,9 @@
 # Short term
-DataStructures/NodeBST.py
 DataStructures/BinarySearchTree.py
+    Testing & verification
+Example
+    Update structure to easily scale
+    Add BinarySearchTree options
 DataStructures/LinkedList.py
 
 # Long term

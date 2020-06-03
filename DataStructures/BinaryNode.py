@@ -1,28 +1,11 @@
 from DataStructures import Node
 
 
-class NodeBST(Node):
-    parent = None
-    left = None
-    right = None
-
-    def __init__(self, key = None, **kwargs):
-        """
-        Initialize with kwargs for each object variable
-        :param **kwargs: key, Node parent, Node left, Node right
-        """
-        super().__init__()
-
-        def get_node_from_kwargs(kw):
-            potential_node = kwargs.get(kw)
-            if isinstance(Node, potential_node):
-                return potential_node
-            else:
-                return None
-
-        self.parent = get_node_from_kwargs('parent')
-        self.left = get_node_from_kwargs('left')
-        self.right = get_node_from_kwargs('right')
+class BinaryNode(Node):
+    tree    = None
+    parent  = None
+    left    = None
+    right   = None
 
     @classmethod
     def or_none(cls, func):
@@ -30,10 +13,27 @@ class NodeBST(Node):
         Decorator
         Verify passed parameter to func is a member of NodeBST
         Overrides Node.or_none
+        For class inheritance, if or_none is needed,
+        you likely want to override this method to pass the subclass
         :param func: decorating function
         :return: decorated function with parameter (Node object || None)
         """
-        return super().or_None(cls, func)
+        return super().or_none(cls, func)
+
+    def __init__(self, key, tree=None, parent=None, left=None, right=None):
+        """
+        Initialize with kwargs for each object variable
+        :param key: key value for new node
+        :param parent: BinaryNode parent of new new node
+        :param left: BinaryNode left child of new node
+        :param right: BinaryNode right child of new node
+        """
+        super().__init__(self, key)
+
+        self.tree   = BinaryNode.or_none(tree)
+        self.parent = BinaryNode.or_none(parent)
+        self.left   = BinaryNode.or_none(left)
+        self.right  = BinaryNode.or_none(right)
 
     def get_parent(self):
         """
@@ -57,33 +57,32 @@ class NodeBST(Node):
         return self.right
 
     @or_none
-    def set_parent(self, node):
+    def set_parent(self, new_parent):
         """
         Set parent to passed node if valid
-        :param node: new parent node
+        :param new_parent: new parent node
         :return: no return value
         """
-        self.parent = node
+        self.parent = new_parent
 
     @or_none
-    def set_left(self, node):
+    def set_left(self, new_left_child):
         """
         Set left child to passed node if valid
-        :param node: new left child node
+        :param new_left_child: new left child node
         :return: no return value
         """
-        self.left = node
+        self.left = new_left_child
 
     @or_none
-    def set_right(self, node):
+    def set_right(self, new_right_child):
         """
         Set right child to passed node if valid
-        :param node: new right child node
+        :param new_right_child: new right child node
         :return: no return value
         """
-        self.right = node
+        self.right = new_right_child
 
-    @or_none
     def is_left_child(self):
         """
         Return boolean is node left child of parent
@@ -96,7 +95,6 @@ class NodeBST(Node):
 
         return is_left_child
 
-    @or_none
     def is_right_child(self):
         """
         Return boolean is node right child of parent
@@ -110,7 +108,6 @@ class NodeBST(Node):
 
         return is_right_child
 
-    @or_none
     def remove_as_subtree(self):
         """
         Remove subtree rooted at self out of its tree
@@ -128,7 +125,7 @@ class NodeBST(Node):
     @or_none
     def replace_with(self, replacement):
         """
-        Replace self with replacement in self's tree
+        Replace self subtree with replacement subtree
         :param replacement: NodeBST replacement node
         :return: replacement node
         """

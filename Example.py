@@ -1,6 +1,6 @@
 from DataStructures.BinaryMaxHeap import BinaryMaxHeap
 from ExampleMenu import ExampleMenu
-import ExampleMaxHeap as emh
+from ExampleMaxHeap import ExampleMaxHeap
 
 myHeap = BinaryMaxHeap()
 
@@ -12,13 +12,7 @@ menu = ExampleMenu("""Program main menu.
 Please select a data structure type.""")
 
 # Max heap
-menu_maxheap = ExampleMenu("""Max heap main menu.
-Please select an option below.
-""", parent=menu)
-menu_maxheap.add_option("Add an item", function=emh.add)
-menu_maxheap.add_option("Extract the maximum value", function=emh.extract)
-menu_maxheap.add_option("Show the max heap", function=emh.show)
-menu_maxheap.add_option("Toggle verbose on/off", function=emh.toggle_verbose)
+menu_maxheap = ExampleMaxHeap.get_menu(menu)
 
 # Build main menu
 menu.add_option("Max heap", submenu=menu_maxheap)

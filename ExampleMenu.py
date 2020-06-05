@@ -20,20 +20,12 @@ class MenuOption:
         submenu (ExampleMenu): menu option opens submenu
     """
 
-    key = 0
-    title = ""
-    # Either function set
-    function = None
-    # Or submenu set
-    submenu = None
-
     def __init__(self, key, title, function=None, submenu=None):
-        assert(title != "", "Menu option must have a title")
         # Only function or submenu may be set
         # Exactly one of the two must be set
-        is_function_none =
-        assert(function is not None or submenu is not None)
-        assert(~(function is None) ^ ~(submenu is None), "Only function or submenu may be set")
+        is_function_none = function is None
+        is_submenu_none  = submenu  is None
+        assert(~is_function_none ^ ~is_submenu_none)
 
         self.key = key
         self.title = title
@@ -44,16 +36,24 @@ class MenuOption:
         """Get title (practice information hiding)"""
         return self.title
 
+    def is_submenu(self):
+        """
+        Check if this option leads to a submenu
+        :returns: True (option leads to submenu) or False (doesn't)"""
+        return self.submenu is not None
+
     def enact(self):
         """
         Perform action of menu option
         Call function
         Or open submenu
         """
+        # If a valid option is being performed,
+        # separate it from the prior interface
+        print ("\n", end='')
         if self.function is not None:
             self.function()
-
-        if self.submenu is not None:
+        elif self.submenu is not None:
             self.submenu.do_menu()
 
 
@@ -70,12 +70,6 @@ class ExampleMenu:
         exit (bool): Flag to show that exit is needed
         next_enum (int): next enum value for this menu
     """
-
-    title = ""
-    options = OrderedDict()
-    parent = None
-    exit = False
-    next_enum = 0
 
     @staticmethod
     def get_int():
@@ -102,21 +96,21 @@ class ExampleMenu:
         self.next_enum = self.next_enum + 1
         return enum
 
-    def __init__(self, title="", parent=None):
-        assert(title != "", "ExampleMenus must have titles")
+    def __init__(self, title, parent=None):
+        # Init instance variables
         self.title = title
+        self.options = OrderedDict()
+        self.parent = parent
+        self.exit = False
+        self.next_enum = 0
 
         # Add back/exit option
-        optttl = ""
-        function = None
-        submenu = None
+        opt_title = "Exit"
         if parent is not None:
-            optttl = "Go back"
-            submenu = parent
-        else:
-            optttl = "Exit"
-            function = self.do_exit
-        self.add_option(optttl, function=function, submenu=submenu)
+            opt_title = "Go back"
+        function = self.do_exit
+        submenu = None
+        self.add_option(opt_title, function=function, submenu=submenu)
 
     def add_option(self, title, function=None, submenu=None):
         """
@@ -135,28 +129,35 @@ class ExampleMenu:
     def do_menu(self):
         """Show menu"""
 
-        # Show title of menu
-        print (self.title)
-
-        # Print options
-        for enum, option in self.options.items():
-            print ("\t", enum, ": ", option.get_title())
-
         # Get input selection
+        option = None
         self.exit = False
         while True:
+            # Show title of menu and options on each iteration
+            print(self.title)
+            for enum, option in self.options.items():
+                print("\t", enum, ": ", option.get_title())
+
             selection = ExampleMenu.get_int()
 
             # Loop options to see if valid
             valid_option = False
-            for option in self.options:
-                if selection == option.key():
+            for key, option in self.options.items():
+                if selection == key:
                     option.enact()
                     valid_option = True
+                    break
+
+            # If no option was called, print an error message
+            if not valid_option:
+                print ("\nPlease select a valid menu option")
 
             # Exit option was chosen
             if self.exit:
                 break
+
+            # Space between menus
+            print ("\n", end='')
 
         # Previous menu is waiting
 

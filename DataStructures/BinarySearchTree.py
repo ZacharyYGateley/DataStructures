@@ -1,4 +1,3 @@
-import math
 from DataStructures.BinarySearchNode import BinarySearchNode
 
 
@@ -34,7 +33,7 @@ class BinarySearchTree:
         :return: no return value
         """
         # Assert valid input
-        assert(isinstance(int, key))
+        assert(isinstance(key, int))
 
         # Create a new node with this key
         node = BinarySearchNode(key=key)
@@ -49,16 +48,16 @@ class BinarySearchTree:
             # Insert node here
             node.parent = parent
 
-    def delete(self, key, verbose=False):
+    def delete(self, key, verbose=False) -> BinarySearchNode:
         """
         Delete a node in the tree by the passed key value.
         Do not raise exception on not found.
         :param key: key of node to delete
         :param verbose: boolean show actions during insert
-        :return: no return value
+        :return: returns the node if it is in the tree
         """
         # Assert valid input
-        assert(isinstance(int, key))
+        assert(isinstance(key, int))
 
         # Find first instance of key in tree
         node = self.search(key, verbose=verbose)
@@ -66,21 +65,24 @@ class BinarySearchTree:
         # Exit if key not found in tree
         # No error required
         if not node:
-            return
+            return None
 
         # Find replacement node
         # If node on the left, replace with successor
         # If no successor, then the first node on the left can be promoted
-        replacement = self.successor(node, verbose=verbose) or node.get_left()
+        replacement = node.successor(verbose=verbose) or node.get_left()
 
         # Remove replacement from tree
         # This represents the root of a subtree
-        replacement = replacement.remove_as_subtree()
+        if replacement is not None:
+            replacement = replacement.remove_as_subtree()
 
         # Splice replacement into tree at node
         node.replace_with(replacement)
 
-    def search(self, key, verbose=False):
+        return node
+
+    def search(self, key, verbose=False) -> BinarySearchNode:
         """
         Finds the first instance of a node with the given search key
         Binary search tree property:
@@ -91,16 +93,14 @@ class BinarySearchTree:
         :return: node
         """
 
-        # Cannot search an empty tree
-        try:
-            assert(not self.is_empty())
-        except AssertionError:
-            raise EmptyTreeException
+        # Value not in tree if tree is empty
+        if self.is_empty():
+            return None
 
         # Loop until the key is found or we hit the bottom of the tree
         node = self.head
         while node is not None:
-            this_key = node.key()
+            this_key = node.get_key()
             if key < this_key:
                 node = node.get_left()
             elif key > this_key:

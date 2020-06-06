@@ -7,7 +7,7 @@ class InvalidMenuOption(Exception):
         pass
 
 
-class MenuOption:
+class Option:
     """
     One single menu option within a menu
 
@@ -17,7 +17,7 @@ class MenuOption:
         key (int): entry number in menu
         title (str): what shows up on the line to the user
         function (obj): menu option calls function
-        submenu (ExampleMenu): menu option opens submenu
+        submenu (Menu): menu option opens submenu
     """
 
     def __init__(self, key, title, function=None, submenu=None):
@@ -57,14 +57,14 @@ class MenuOption:
             self.submenu.do_menu()
 
 
-class ExampleMenu:
+class Menu:
     """
     One list of menu options that link to other functions or submenus
 
     Attributes:
         title (str): title of menu itself, shows above options
         options (OrderedDict): ordered list of menu options
-        parent (ExampleMenu): parent menu of this
+        parent (Menu): parent menu of this
             Top level: shows "Exit"
             All sub levels: show "Back"
         exit (bool): Flag to show that exit is needed
@@ -122,7 +122,7 @@ class ExampleMenu:
         """
 
         new_enum = self.get_enum()
-        new_option = MenuOption(new_enum, title, function=function, submenu=submenu)
+        new_option = Option(new_enum, title, function=function, submenu=submenu)
 
         self.options[new_enum] = new_option
 
@@ -138,7 +138,7 @@ class ExampleMenu:
             for enum, option in self.options.items():
                 print("\t", enum, ": ", option.get_title())
 
-            selection = ExampleMenu.get_int()
+            selection = Menu.get_int()
 
             # Loop options to see if valid
             valid_option = False

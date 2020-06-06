@@ -1,4 +1,4 @@
-from DataStructures import Node
+from DataStructures.Node import Node
 
 
 class BinaryNode(Node):
@@ -8,17 +8,14 @@ class BinaryNode(Node):
     right   = None
 
     @classmethod
-    def or_none(cls, func):
+    def or_none(cls, node):
         """
-        Decorator
-        Verify passed parameter to func is a member of NodeBST
-        Overrides Node.or_none
-        For class inheritance, if or_none is needed,
-        you likely want to override this method to pass the subclass
-        :param func: decorating function
-        :return: decorated function with parameter (Node object || None)
+        Verify passed node is a member of this class
+        Return either the node or None
+        :param node: node in question
+        :return: BinaryNode object || None
         """
-        return super().or_none(cls, func)
+        return node if isinstance(node, cls) else None
 
     def __init__(self, key, tree=None, parent=None, left=None, right=None):
         """
@@ -28,7 +25,7 @@ class BinaryNode(Node):
         :param left: BinaryNode left child of new node
         :param right: BinaryNode right child of new node
         """
-        super().__init__(self, key)
+        super().__init__(key)
 
         self.tree   = BinaryNode.or_none(tree)
         self.parent = BinaryNode.or_none(parent)
@@ -56,32 +53,32 @@ class BinaryNode(Node):
         """
         return self.right
 
-    @or_none
     def set_parent(self, new_parent):
         """
         Set parent to passed node if valid
         :param new_parent: new parent node
         :return: no return value
         """
-        self.parent = new_parent
+        node = BinaryNode.or_none(new_parent)
+        self.parent = node
 
-    @or_none
     def set_left(self, new_left_child):
         """
         Set left child to passed node if valid
         :param new_left_child: new left child node
         :return: no return value
         """
-        self.left = new_left_child
+        node = BinaryNode.or_none(new_left_child)
+        self.left = node
 
-    @or_none
     def set_right(self, new_right_child):
         """
         Set right child to passed node if valid
         :param new_right_child: new right child node
         :return: no return value
         """
-        self.right = new_right_child
+        node = BinaryNode.or_none(new_right_child)
+        self.right = node
 
     def is_left_child(self):
         """
@@ -122,13 +119,14 @@ class BinaryNode(Node):
 
         return self
 
-    @or_none
-    def replace_with(self, replacement):
+    def replace_with(self, replacement_arg):
         """
         Replace self subtree with replacement subtree
         :param replacement: NodeBST replacement node
         :return: replacement node
         """
+        replacement = BinaryNode.or_none(replacement_arg)
+
         # Do not proceed if replacement is invalid
         if replacement is None:
             return None

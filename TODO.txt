@@ -1,9 +1,9 @@
 # Short term
 DataStructures/BinarySearchTree.py
+    show method
+    show method incorporates verbose
+    show method incorporates highlight
     Testing & verification
-Example
-    Update structure to easily scale
-    Add BinarySearchTree options
 DataStructures/LinkedList.py
 
 # Long term

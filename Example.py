@@ -1,6 +1,6 @@
 from DataStructures.BinaryMaxHeap import BinaryMaxHeap
-from ExampleMenu import ExampleMenu
-from ExampleMaxHeap import ExampleMaxHeap
+from ConsoleMenu import Menu
+from ExampleFunctions import MaxHeap, BST
 
 myHeap = BinaryMaxHeap()
 
@@ -8,14 +8,16 @@ myHeap = BinaryMaxHeap()
 # Build menus
 # Build submenus before main menu
 # so that references are available
-menu = ExampleMenu("""Program main menu.
+menu = Menu("""Program main menu.
 Please select a data structure type.""")
 
 # Max heap
-menu_maxheap = ExampleMaxHeap.get_menu(menu)
+menu_maxheap = MaxHeap.get_menu(menu)
+menu_bst = BST.get_menu(menu)
 
 # Build main menu
-menu.add_option("Max heap", submenu=menu_maxheap)
+menu.add_option("Binary max heap", submenu=menu_maxheap)
+menu.add_option("Binary search tree", submenu=menu_bst)
 
 
 # Loop main menu

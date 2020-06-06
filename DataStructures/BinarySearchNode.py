@@ -1,17 +1,16 @@
-from DataStructures import BinaryNode
+from DataStructures.BinaryNode import BinaryNode
 
 
 class BinarySearchNode(BinaryNode):
     @classmethod
-    def or_none(cls, func):
+    def or_none(cls, node):
         """
-        Decorator
-        Verify passed parameter to func is a member of NodeBST
-        Overrides BinaryNode.or_none
-        :param func: decorating function
-        :return: decorated function with parameter (Node object || None)
+        Verify passed node is a member of this class
+        Return either the node or None
+        :param node: node in question
+        :return: BinarySearchNode object || None
         """
-        return super().or_none(cls, func)
+        return node if isinstance(node, cls) else None
 
     def predecessor(self, verbose=False):
         """

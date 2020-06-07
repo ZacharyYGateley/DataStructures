@@ -24,8 +24,22 @@ class Node:
         """
         self.key = key
 
-    def get_key(self):
+    def get_key(self) -> int:
+        """
+        Get the current key
+        Keys must be integers
+        :return: no return value
+        """
         return self.key
 
     def set_key(self, key):
-        self.key = key
+        """
+        Set key
+        Keys must be integers
+        :param key: integer new key
+        :return: no return value
+        """
+        try:
+            self.key = int(key)
+        except TypeError:
+            print("Nodes may only store integer values")

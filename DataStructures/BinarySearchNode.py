@@ -22,8 +22,16 @@ class BinarySearchNode(BinaryNode):
         predecessor = self.get_left()
         # Then crawl right side of subtree
         if predecessor is not None:
+            # Show process if verbose
+            if verbose:
+                self.show(highlight=self, secondary_highlight=predecessor)
+
             while predecessor.get_right() is not None:
                 predecessor = predecessor.get_right()
+
+        # Show the process if verbose
+        if verbose:
+            self.show(highlight=self, secondary_highlight=predecessor)
 
         # Finish
         return predecessor
@@ -38,8 +46,16 @@ class BinarySearchNode(BinaryNode):
         successor = self.get_right()
         # Then traverse left side of tree until we hit a leaf
         if successor is not None:
+            # Show process if verbose
+            if verbose:
+                self.show(highlight=self, secondary_highlight=successor)
+
             while successor.get_left() is not None:
                 successor = successor.get_left()
+
+        # Show the process if verbose
+        if verbose:
+            self.show(highlight=self, secondary_highlight=successor)
 
         # Finish
         return successor
@@ -54,7 +70,9 @@ class BinarySearchNode(BinaryNode):
         """
         #
         new_subroot = self.get_right()
-        assert(new_subroot is not None, "Cannot rotate subtree rooted at node (%d) to the left".format(self.get_key()))
+        if new_subroot is None:
+            print ("Cannot rotate subtree rooted at node (%d) to the left".format(self.get_key()))
+            return
 
         # If right child has a left child,
         # it needs to jump to the other side of the new root
@@ -82,7 +100,9 @@ class BinarySearchNode(BinaryNode):
         :return: new root of subtree
         """
         new_subroot = self.get_left()
-        assert(new_subroot is not None, "Cannot rotate subtree rooted at node (%d) to the right.".format(self.get_key()))
+        if new_subroot is None:
+            print("Cannot rotate subtree rooted at node (%d) to the left".format(self.get_key()))
+            return None
 
         # If left child has a right child,
         # It needs to jump from left side to right side
@@ -100,3 +120,12 @@ class BinarySearchNode(BinaryNode):
 
         # Return new subroot of tree
         return new_subroot
+
+    def show(self, highlight=None, secondary_highlight=None):
+        """
+        Mirrors show of BinarySearchTree
+        :param args: Any arguments to pass on to BinarySearchTree
+        :return: no return value
+        """
+        if self.tree and self.tree.show:
+            self.tree.show(highlight=highlight, secondary_highlight=secondary_highlight)

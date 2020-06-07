@@ -98,8 +98,7 @@ class BST:
     @classmethod
     def show(cls):
         """Show the tree"""
-        print ("Oops! This doesn't work yet.")
-        pass
+        BST.tree.show()
 
     @classmethod
     def toggle_verbose(cls):

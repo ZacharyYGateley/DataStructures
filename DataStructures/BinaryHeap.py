@@ -64,13 +64,20 @@ class BinaryHeap:
             return
 
         # Maximum number of digits determines padding
-        minimum_cell = int(np.ceil(np.log(np.max(self.heap) / np.log(10)))) + 3
+        max_digs = self.get_max_digs()
+        minimum_cell = max_digs + 3
 
-        def demarcate():
-            print (''.center(minimum_cell * int(np.power(2, self.level)), '*'))
+        def demarcate_heap(hgt=self.level, cell_wid=minimum_cell):
+            """
+            Show line of asterisks to demarcate bounds of heap
+            :return: no return value
+            """
+            # Number of nodes on bottom is 2^hgt
+            max_nodes = int(np.power(2, hgt))
+            print (''.center(cell_wid * max_nodes, '*'))
 
         # Output each level
-        demarcate()
+        demarcate_heap()
         last_level = 0
         for i in range(0, self.last_item + 1, 1):
             # Center each level so that has appropriate width
@@ -83,16 +90,16 @@ class BinaryHeap:
             width_each = int(np.power(2, self.level - level)) * minimum_cell
 
             # Get string value
-            value_number = str(self.get_value_at(i))
-            value_formatted = value_number.center(width_each)
+            value_str = str(self.get_value_at(i))
+            value_formatted = value_str.center(width_each)
             if i == highlight:
-                number_highlighted = self.HIGHLIGHT_FORE + self.HIGHLIGHT_BACK + value_number + colorama.Style.RESET_ALL
-                value_formatted = value_formatted.replace(value_number, number_highlighted)
+                number_highlighted = self.HIGHLIGHT_FORE + self.HIGHLIGHT_BACK + value_str + colorama.Style.RESET_ALL
+                value_formatted = value_formatted.replace(value_str, number_highlighted)
             print (value_formatted, end='')
 
         # End line
         print ('\n', end='')
-        demarcate()
+        demarcate_heap()
 
     @staticmethod
     def get_parent_index(i):
@@ -138,6 +145,23 @@ class BinaryHeap:
         :return: value at index or default value
         """
         return self.default_value if i > self.last_item else self.heap[i]
+
+    def get_max_digs(self):
+        """
+        Return the height of the heap
+        and the maximum number of digits for any entry in the heap
+        :return (int, int): height, max_digs
+        """
+
+        # Get maximum number of digits
+        # 20200607: np.ceil --> np.floor + 1
+        #   Consider edge case n = 9 vs n = 10
+        #   ceil(log_10(9)) == 1,       ceil(log_10(10)) == 1
+        #   floor(log_10(9)) + 1 == 1,  floor(log_10(10)) + 1 == 2
+        max_digs = int(np.floor(np.log10(np.max(self.heap))) + 1)
+
+        return max_digs
+
 
     def set_value_at(self, i, new_value=default_value):
         """

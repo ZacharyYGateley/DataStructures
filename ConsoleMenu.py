@@ -81,7 +81,10 @@ class Menu:
         while True:
             print('\t#: ', end='')
             try:
-                integer = int(input())
+                selection = input()
+                if selection == '':
+                    raise InvalidMenuOption
+                integer = int(selection)
                 break
             except InvalidMenuOption:
                 print('Please enter a valid integer')

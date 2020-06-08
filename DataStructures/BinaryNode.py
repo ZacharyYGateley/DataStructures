@@ -139,12 +139,15 @@ class BinaryNode(Node):
         Remove subtree rooted at self out of its tree
         :return: self
         """
+        # Clear parent's reference to self
         parent = self.get_parent()
         if parent is not None:
             if self.is_left_child():
                 parent.set_left(None)
-            else:
+            elif self.is_right_child():
                 parent.set_right(None)
+        # Clear self's reference to parent
+        self.set_parent(None)
 
         return self
 
@@ -152,7 +155,7 @@ class BinaryNode(Node):
         """
         Replace self subtree with replacement subtree
         May replace node with None
-        :param replacement: NodeBST replacement node
+        :param replacement_arg: NodeBST replacement node
         :return: replacement node
         """
         replacement = BinaryNode.or_none(replacement_arg)
@@ -167,22 +170,11 @@ class BinaryNode(Node):
         if parent is not None:
             if self.is_left_child():
                 parent.set_left(replacement)
-            else:
+            elif self.is_right_child():
                 parent.set_right(replacement)
+        elif self.tree is not None:
+            # Replacing head
+            self.tree.head = replacement
 
-        # Link left
-        left = self.get_left()
-        # Prevent infinite loops
-        if left is not replacement:
-            replacement.set_left(left)
-
-        # Link right
-        right = self.get_right()
-        # Prevent infinite loops
-        if right is not replacement:
-            replacement.set_right(right)
-
-        # Delete node
+        # Remove node from tree
         self.set_parent(None)
-        self.set_left(None)
-        self.set_right(None)

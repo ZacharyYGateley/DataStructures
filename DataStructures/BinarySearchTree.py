@@ -123,32 +123,58 @@ class BinarySearchTree(BinaryTree):
             return None
 
         # Find replacement node
-        # If node on the left, replace with successor
-        # If no successor, then the first node on the left can be promoted
-        replacement = node.successor(verbose=verbose)
-        successor_right = None
-        if replacement is not None:
-            # Take care of successor's children
-            successor_right = replacement.get_right()
-            if successor_right is not None:
-                successor_right = successor_right.remove_as_subtree()
+        right = node.get_right()
+        left = node.get_left()
+        # Simple cases, left or right child of delete are None
+        if right is None:
+            # Shift left up
+            # Left might also be none
+            # Logic still works
+            if left is not None:
+                left = left.remove_as_subtree()
+            replacement = node.replace_with(left)
+        elif left is None:
+            # Shift right up
+            replacement = node.replace_with(right.remove_as_subtree())
         else:
-            replacement = node.get_left()
-
-        # Remove replacement from tree
-        # This represents the root of a subtree
-        if replacement is not None:
-            if successor_right is not None:
-                # If the successor (replacement) has children nodes
-                # Make those nodes the children of successor's parent
-                replacement.replace_with(successor_right)
+            # Right subtree contains the successor
+            successor = node.successor(verbose=verbose)
+            # If the successor is the right child,
+            # Right child is the replacement
+            # (successor's left subtree is always empty)
+            if successor == right:
+                # Pop whole tree to the right
+                replacement = right.remove_as_subtree()
+                # Replacement is a subtree
             else:
-                # Otherwise, pop replacement from tree
-                # It has no children
-                replacement = replacement.remove_as_subtree()
+                # Successor is embedded
+                # (i.e. successor = node.right.left....left)
+                # Successor might have a right subtree
+                # Transplant it into successor's position
+                problem_child = successor.get_right()
+                if problem_child is not None:
+                    # Show this problem child
+                    if verbose:
+                        self.show(highlight=successor, secondary_highlight=problem_child)
 
-        # Splice replacement into tree at node
-        node.replace_with(replacement)
+                    problem_child = problem_child.remove_as_subtree()
+                # Successor parent is not None and is not delete node
+                # set_left links both ways, parent->child, child->parent
+                successor.get_parent().set_left(problem_child)
+                successor.set_right(None)
+
+                # Show the problem child's movement
+                if verbose and problem_child is not None:
+                    self.show(secondary_highlight=problem_child)
+
+                replacement = successor.remove_as_subtree()
+                # Add right side of delete to this node
+                replacement.set_right(right)
+
+            # Left children of node go to its replacement subtree
+            # Recall successor's left subtree is always empty
+            left = left.remove_as_subtree()
+            replacement.set_left(left)
 
         # Clean up any loose ends
         if self.head == node:
@@ -156,7 +182,7 @@ class BinarySearchTree(BinaryTree):
 
         # Show process if verbose
         if verbose:
-            self.show()
+            self.show(highlight=replacement)
 
         return node
 

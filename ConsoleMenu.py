@@ -99,17 +99,26 @@ class Menu:
         self.next_enum = self.next_enum + 1
         return enum
 
-    def __init__(self, title, parent=None):
+    def __init__(self, title, parent_menu=None):
+        """
+        Initializes a new menu, automatically adding a menu option
+        "Exit" or "Go back" as necessary depending on whether
+        there is a parent menu.
+        :param title: str Title to be shown above menu options
+        :param parent_menu: if not None, first option is Go Back to this menu
+                            if None, first option is Exit, closes the program
+        """
+
         # Init instance variables
         self.title = title
         self.options = OrderedDict()
-        self.parent = parent
+        self.parent = parent_menu
         self.exit = False
         self.next_enum = 0
 
         # Add back/exit option
         opt_title = "Exit"
-        if parent is not None:
+        if parent_menu is not None:
             opt_title = "Go back"
         function = self.do_exit
         submenu = None

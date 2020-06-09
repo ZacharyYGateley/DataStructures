@@ -49,7 +49,7 @@ class MaxHeap:
         """
         menu = Menu("""Binary max heap main menu.
 Please select an option below.
-""", parent=parent)
+""", parent_menu=parent)
         # Menu options
         # Pass *references* to functions, not return values
         menu.add_option("Add an item to the binary max heap", function=MaxHeap.add)
@@ -121,7 +121,7 @@ class BST:
         """
         menu = Menu("""Binary search tree main menu.
 Please select an option below.
-""", parent=parent)
+""", parent_menu=parent)
         # Menu options
         # Pass *references* to functions, not return values
         menu.add_option("Add an item to the tree", function=BST.insert)

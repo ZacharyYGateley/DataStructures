@@ -24,14 +24,14 @@ class BinarySearchNode(BinaryNode):
         if predecessor is not None:
             # Show process if verbose
             if verbose:
-                self.show(highlight=self, secondary_highlight=predecessor)
+                self.show(primary_highlights=self, secondary_highlights=predecessor)
 
             while predecessor.get_right() is not None:
                 predecessor = predecessor.get_right()
 
         # Show the process if verbose
         if verbose:
-            self.show(highlight=self, secondary_highlight=predecessor)
+            self.show(primary_highlights=self, secondary_highlights=predecessor)
 
         # Finish
         return predecessor
@@ -48,14 +48,14 @@ class BinarySearchNode(BinaryNode):
         if successor is not None:
             # Show process if verbose
             if verbose:
-                self.show(highlight=self, secondary_highlight=successor)
+                self.show(primary_highlights=self, secondary_highlights=successor)
 
             while successor.get_left() is not None:
                 successor = successor.get_left()
 
         # Show the process if verbose
         if verbose:
-            self.show(highlight=self, secondary_highlight=successor)
+            self.show(primary_highlights=self, secondary_highlights=successor)
 
         # Finish
         return successor
@@ -74,19 +74,43 @@ class BinarySearchNode(BinaryNode):
             print ("Cannot rotate subtree rooted at node (%d) to the left".format(self.get_key()))
             return
 
+        # Show root nodes that will be rotated
+        if verbose:
+            self.show(primary_highlights=new_subroot, secondary_highlights=self)
+
         # If right child has a left child,
         # it needs to jump to the other side of the new root
         problem_child = new_subroot.get_left()
         if problem_child is not None:
+            # Show the problem child before it is removed
+            if verbose:
+                self.show(primary_highlights=new_subroot, secondary_highlights=(self, problem_child))
+
             problem_child = problem_child.remove_as_subtree()
 
         # Shift new subroot up
-        new_subroot.set_parent(self.get_parent())
-        new_subroot.set_left(self)
+        parent = self.get_parent()
+        new_subroot.set_parent(parent)
+        if parent is not None:
+            if self.is_left_child():
+                parent.set_left(new_subroot)
+            else:
+                parent.set_right(new_subroot)
+
+        # Update pointer to tree head if necessary
+        if self.tree and self.tree.head == self:
+            self.tree.head = new_subroot
 
         # Shift self down
+        new_subroot.set_left(self)
+
+        # Reattach problem child
         self.set_parent(new_subroot)
         self.set_right(problem_child)
+
+        # Show final tree
+        if verbose:
+            self.show(primary_highlights=new_subroot, secondary_highlights=(self, problem_child))
 
         # Return new subroot of tree
         return new_subroot
@@ -101,31 +125,55 @@ class BinarySearchNode(BinaryNode):
         """
         new_subroot = self.get_left()
         if new_subroot is None:
-            print("Cannot rotate subtree rooted at node (%d) to the left".format(self.get_key()))
             return None
+
+        # Show root nodes that will be rotated
+        if verbose:
+            self.show(primary_highlights=new_subroot, secondary_highlights=self)
 
         # If left child has a right child,
         # It needs to jump from left side to right side
         problem_child = new_subroot.get_right()
         if problem_child is not None:
+            # Show the problem child before it is removed
+            if verbose:
+                self.show(primary_highlights=new_subroot, secondary_highlights=(self, problem_child))
+
             problem_child = problem_child.remove_as_subtree()
 
         # Shift new subroot up
-        new_subroot.set_parent(self.get_parent())
-        new_subroot.set_right(self)
+        parent = self.get_parent()
+        new_subroot.set_parent(parent)
+        if parent is not None:
+            if self.is_left_child():
+                parent.set_left(new_subroot)
+            else:
+                parent.set_right(new_subroot)
+
+        # Update pointer to tree head if necessary
+        if self.tree and self.tree.head == self:
+            self.tree.head = new_subroot
 
         # Shift self down
+        new_subroot.set_right(self)
+
+        # Reattach problem child
         self.set_parent(new_subroot)
         self.set_left(problem_child)
+
+        # Show final tree
+        if verbose:
+            self.show(primary_highlights=new_subroot, secondary_highlights=(self, problem_child))
 
         # Return new subroot of tree
         return new_subroot
 
-    def show(self, highlight=None, secondary_highlight=None):
+    def show(self, primary_highlights=(None,), secondary_highlights=(None,)):
         """
-        Mirrors show of BinarySearchTree
-        :param args: Any arguments to pass on to BinarySearchTree
+        Mirrors show of BinaryTree
+        :param primary_highlights: mirrors BinaryTree
+        :param secondary_highlights: mirrors BinaryTree
         :return: no return value
         """
         if self.tree and self.tree.show:
-            self.tree.show(highlight=highlight, secondary_highlight=secondary_highlight)
+            self.tree.show(primary_highlights=primary_highlights, secondary_highlights=secondary_highlights)

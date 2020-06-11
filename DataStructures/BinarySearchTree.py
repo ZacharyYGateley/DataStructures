@@ -52,7 +52,7 @@ class BinarySearchTree(BinaryTree):
         # Show tree if verbose
         if verbose:
             # Primary colors for inserted node
-            self.show(highlight=node)
+            self.show(primary_highlights=node)
 
     def insert_get_parent(self, key, verbose=False) -> (BinarySearchNode or None, bool, bool):
         """
@@ -82,7 +82,7 @@ class BinarySearchTree(BinaryTree):
             # Highlight node while searching for where it belongs
             if verbose:
                 # Secondary colors for searching
-                self.show(secondary_highlight=node)
+                self.show(secondary_highlights=node)
 
             this_key = node.get_key()
             if key < this_key:
@@ -155,7 +155,7 @@ class BinarySearchTree(BinaryTree):
                 if problem_child is not None:
                     # Show this problem child
                     if verbose:
-                        self.show(highlight=successor, secondary_highlight=problem_child)
+                        self.show(primary_highlights=successor, secondary_highlights=problem_child)
 
                     problem_child = problem_child.remove_as_subtree()
                 # Successor parent is not None and is not delete node
@@ -165,7 +165,7 @@ class BinarySearchTree(BinaryTree):
 
                 # Show the problem child's movement
                 if verbose and problem_child is not None:
-                    self.show(secondary_highlight=problem_child)
+                    self.show(secondary_highlights=problem_child)
 
                 replacement = successor.remove_as_subtree()
                 # Add right side of delete to this node
@@ -182,7 +182,7 @@ class BinarySearchTree(BinaryTree):
 
         # Show process if verbose
         if verbose:
-            self.show(highlight=replacement)
+            self.show(primary_highlights=replacement)
 
         return node
 
@@ -211,7 +211,7 @@ class BinarySearchTree(BinaryTree):
 
             # Show process if verbose
             if verbose:
-                self.show(secondary_highlight=node)
+                self.show(secondary_highlights=node)
 
             if key < this_key:
                 # Key belongs on the left side of this node (re BST property)
@@ -222,6 +222,6 @@ class BinarySearchTree(BinaryTree):
 
         # Show found item if verbose
         if node is not None and verbose:
-            self.show(highlight=node)
+            self.show(primary_highlights=node)
 
         return node

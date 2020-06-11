@@ -1,9 +1,4 @@
 # Short term
-DataStructures/BinarySearchTree.py
-    Testing & verification
-        Delete is not up to snuff yet, see ex at end
-    Add rotations into menu
-    Add highlights into rotations
 DataStructures/LinkedList.py
 
 # Long term
@@ -25,20 +20,3 @@ Algorithms?
 		MSTs
 			Kruskal
 			Prim
-
-
-
-ex: Broken delete. Delete head.
-********************************************************************************************************************************
-                                                               4
-                                                                                               6
-                                                                               5                               9
-                                                                                       5
-                                                                                           5
-                                                                                             5
-********************************************************************************************************************************
-****************
-       5
-           6
-         5   9
-****************

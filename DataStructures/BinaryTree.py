@@ -77,13 +77,16 @@ class BinaryTree:
         """
         return self.head is None
 
-    def show(self, highlight=None, secondary_highlight=None):
+    def show(self, primary_highlights=(None,), secondary_highlights=(None,)):
         """
         Show binary tree
-        :param highlight: BinarySearchNode to be highlighted with primary colors
-        :param secondary_highlight: BinarySearchNode to be highlighted with secondary colors
+        :param primary_highlights: tuple (BinarySearchNode,) to be highlighted with primary colors
+        :param secondary_highlights: tuple (BinarySearchNode,) to be highlighted with secondary colors
         :return: no return value
         """
+        # Highlight/secondary must have __contains__ method
+        primary_highlights = primary_highlights if type(primary_highlights) is tuple else (None, primary_highlights)
+        secondary_highlights = secondary_highlights if type(secondary_highlights) is tuple else (None, secondary_highlights)
 
         if self.is_empty():
             print ('****************')
@@ -150,9 +153,9 @@ class BinaryTree:
             if node is not None:
                 value_str = str(node.get_key())
             value_formatted = value_str.center(width_each)
-            if node is not None and (node == highlight or node == secondary_highlight):
-                fore = self.HIGHLIGHT_FORE if node == highlight else self.SECONDARY_FORE
-                back = self.HIGHLIGHT_BACK if node == highlight else self.SECONDARY_BACK
+            if node is not None and (node in primary_highlights or node in secondary_highlights):
+                fore = self.HIGHLIGHT_FORE if node in primary_highlights else self.SECONDARY_FORE
+                back = self.HIGHLIGHT_BACK if node in primary_highlights else self.SECONDARY_BACK
                 value_highlighted = fore + back + value_str + colorama.Style.RESET_ALL
                 value_formatted = value_formatted.replace(value_str, value_highlighted)
             print (value_formatted, end='')

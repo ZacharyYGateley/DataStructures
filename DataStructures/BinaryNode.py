@@ -178,3 +178,19 @@ class BinaryNode(Node):
 
         # Remove node from tree
         self.set_parent(None)
+
+    def __contains__(self, compare):
+        """
+        Dummy function to prevent exceptions
+        when a BinaryNode is given
+        instead of a tuple(BinaryNode)
+        """
+        return self == compare
+
+    def __iter__(self):
+        """
+        Dummy function to prevent exceptions on
+        conversion to tuple.
+        Only one hit.
+        """
+        yield self

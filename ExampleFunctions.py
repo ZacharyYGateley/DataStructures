@@ -65,6 +65,58 @@ class BST:
     tree = BinarySearchTree()
     verbose = False
 
+    class Rotate:
+        @classmethod
+        def left(cls):
+            """Rotate the tree left"""
+            print("Enter the key at which to rotate left: ")
+            key_value = Menu.get_int()
+            print('\n', end='')
+            node = BST.tree.search(key_value, verbose=BST.verbose)
+            if isinstance(node, BinarySearchNode):
+                new_root = node.rotate_left(verbose=BST.verbose)
+                if new_root is not None:
+                    print("The tree was rotated left at", key_value)
+                else:
+                    print("Unable to rotate the tree left at", key_value)
+            else:
+                print(key_value, "was not found in the tree")
+
+
+        @classmethod
+        def right(cls):
+            """Rotate the tree right"""
+            print("Enter the key at which to rotate right: ")
+            key_value = Menu.get_int()
+            print('\n', end='')
+            node = BST.tree.search(key_value, verbose=BST.verbose)
+            if isinstance(node, BinarySearchNode):
+                new_root = node.rotate_right(verbose=BST.verbose)
+                if new_root is not None:
+                    print("The tree was rotated right at", key_value)
+                else:
+                    print("Unable to rotate the tree right at", key_value)
+            else:
+                print(key_value, "was not found in the tree")
+
+        @classmethod
+        def get_menu(cls, parent=None):
+            """
+            Rotate the tree
+            :param parent: ExampleMenu parent menu of this max menu
+                           Should be from BST
+            :return: ExampleMenu rotate menu
+            """
+            menu = Menu("""Rotate the tree:
+            """, parent_menu=parent)
+            # Menu options
+            # Pass *references* to functions, not return values
+            menu.add_option("Rotate left at...", function=BST.Rotate.left)
+            menu.add_option("Rotate right at...", function=BST.Rotate.right)
+
+            return menu
+
+
     @classmethod
     def insert(cls):
         """Add a new item to the tree"""
@@ -115,18 +167,22 @@ class BST:
     @classmethod
     def get_menu(cls, parent=None) -> Menu:
         """
-        Get max heap menu options
+        Get binary search tree menu options
         :param parent: ExampleMenu parent menu of this max menu
         :return: ExampleMenu max heap menu
         """
         menu = Menu("""Binary search tree main menu.
 Please select an option below.
 """, parent_menu=parent)
+
+        rotate_menu = BST.Rotate.get_menu(parent=menu)
+
         # Menu options
         # Pass *references* to functions, not return values
         menu.add_option("Add an item to the tree", function=BST.insert)
         menu.add_option("Find an item in the tree", function=BST.search)
         menu.add_option("Delete an item from the tree", function=BST.delete)
+        menu.add_option("Rotate tree", submenu=rotate_menu)
         menu.add_option("Show the tree", function=BST.show)
         menu.add_option("Toggle verbose on/off", function=BST.toggle_verbose)
         menu.add_option("Empty the tree", function=BST.empty_tree)
